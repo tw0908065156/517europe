@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我要去歐洲—login</title>
+
+<!-- Font: Source Sans Pro -->
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet"
+	href="../../plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+
+</head>
+
+<body class="hold-transition layout-top-nav">
+	<!-- head.js -->
+	<div class="headerPage">
+		<script type="text/javascript" src="head.js"></script>
+	</div>
+
+	<!-- body -->
+	<div
+		style="height: 600px; background-color: #d2e2f2; background-image: url(../../images/generic/bg_regist.jpg); padding-top: 30px; padding-bottom: 10px; padding-left: 360px; padding-right: 0px">
+
+		<div class="login-box" style="margin: auto">
+			<div class="login-logo">
+				<a href="europe-homepage.html"><b>專業歐洲旅遊 <font color=#ffa86e>私人訂製</font></b></a>
+			</div>
+		
+			<div class="card"
+				style="background: white; opacity: 0.62; filter: Alpha(Opacity = 62, Style = 0)">
+				<div class="card-body login-card-body">
+					<p class="login-box-msg">
+						<b><font color=#0000fa>親愛的貴賓*歡迎回來*請登入</font></b>
+					</p>
+
+					<form id="form-login" action="../../index3.html" method="post">
+						<div class="input-group mb-3">
+							<input id="clientEmail" name="clientEmail" type="email" class="form-control"
+								placeholder="请输入您的電子郵箱(登入帳號)">
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-envelope" style="color: #ffa86e"></span>
+								</div>
+							</div>
+						</div>
+						<div class="input-group mb-3">
+							<input name="password" type="password" class="form-control"
+								placeholder="請輸入密碼">
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-lock" style="color: #ffa86e"></span>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-8">
+								<div class="icheck-primary" style="margin-left:20px">
+								 <!-- <input type="checkbox" id="remember">  -->
+								<label for="remember">  </label>
+								</div>
+							</div>
+						
+							<div class="col-4" style="margin-bottom:10px">
+								<button id="btn-login" type="button"
+									class="btn btn-primary btn-block" >登入</button>
+							</div>
+						
+						</div>
+					</form>
+
+					<div class="row">
+					<button id="btn-forgotps" type="button" class="btn btn-outline-danger">
+						<strong>忘記密碼</strong>
+					</button>
+					<span style="width:10px;"></span>
+					<button type="button" class="btn btn-outline-warning">
+						<a href="reg.html" ><strong>還沒有帳號?&nbsp請前往註冊頁面</strong></a>
+					</button>
+						
+					</div>
+				</div>
+				<!-- /.login-card-body -->
+			</div>
+		</div>
+
+		<!-- /body -->
+	</div>
+
+	<!-- foot.js -->
+	<div class="footerPage">
+		<script type="text/javascript" src="foot.js"></script>
+	</div>
+
+	<!-- jQuery -->
+	<script src="../../plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../../dist/js/adminlte.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+
+	<script src="../../dist/js/demo.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#btn-login").click(function() {
+				$.ajax({
+					"url" : "/clients/login",
+					"data" : $("#form-login").serialize(),
+					"type" : "post",
+					"dataType" : "json",
+					"success" : function(json) {
+						if (json.state == 100) {
+							alert("登入成功，歡迎光臨歐洲旅遊私人定製！");
+							//跳轉到VIP主頁面
+							location.href = "/webs/vip/vip-homepage.html";
+						} else {
+							alert(json.message);
+						}
+					},
+				});				
+			});
+			$("#btn-forgotps").click(function() {
+			location.href = "/webs/forgot-password.html";
+			});
+		});
+	</script>
+</body>
+</html>

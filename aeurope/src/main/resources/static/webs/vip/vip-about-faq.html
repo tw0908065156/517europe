@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我要去歐洲—關於私人定製</title>
+
+<!-- Font: Source Sans Pro -->
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet"
+	href="../../plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+</head>
+
+<body class="hold-transition layout-top-nav">
+<!-- head.js -->
+	<div class="headerPage">
+		 <script type="text/javascript" src="viphead.js"></script> 
+	</div>	
+<!-- Main content -->
+<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>關於私人訂製Q&A</h1>
+				</div>
+				<div class="col-sm-6 ">
+					<a class="float-right" href="contact.html"><h5>***直接聯絡我們***</h5></a>
+				</div>
+			</div>
+		</div>
+		<!-- /.container-fluid -->
+	</section>
+	<section class="content" style="padding-left:15px; padding-right:15px">
+		<div class="row">
+			<div class="col-12" id="about-faq">
+			<!-- function showRAQList()  -->
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 mt-3 text-center">
+							<p class="lead">
+					您有任何其他問題或是意見/建議，都歡迎隨時<a href="contact.html"><strong>聯絡我們!</a><br>
+				</p>
+				<p class="lead">
+					<a href="contact.html">Contact us</strong></a>, if you found not the
+					right answer or you have an other question?<br>
+				</p>
+			</div>
+		</div>
+	</section>
+<!-- foot.js -->
+	<div class="footerPage">
+		<script type="text/javascript" src="../foot.js"></script>
+	</div>
+	
+	<!-- REQUIRED SCRIPTS -->
+
+	<!-- jQuery -->
+	<script src="../../plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../../dist/js/adminlte.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	
+	<script src="../../dist/js/demo.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function() {
+			showRAQList();
+		});
+
+		function showRAQList() {
+			$.ajax({
+						"url" : "/about_faq/",
+						"type" : "get",
+						"dataType" : "json",
+						"success" : function(json) {
+							var list = json.data;
+							$("#about-faq").empty();
+							for (var i = 0; i < list.length; i++) {
+								var html = '<div class="card card-' +( ((i % 2) == 0)? "success" : "warning" )+' card-outline">'
+											+' <a class="d-block w-100 " data-toggle="collapse"  '
+											+' href="#'+ list[i].faqCode + ' " aria-expanded="false"> '
+											+' <div class="card-header"> '
+											+' <h4 class="card-title w-100">#{aboutQuestion}</h4> '
+											+' </div></a> '
+											+' <div id="#{faqCode}" class="collapse" data-parent="#about-faq"  style=""> '
+											+' <div class="card-body"  style=" font-size: 18px; line-height: 35px;">#{aboutAnswer}</div> '
+											+' </div> '
+											+' </div> ';
+								html=html.replace("#{aboutQuestion}", list[i].aboutQuestion);
+								html=html.replace("#{faqCode}", list[i].faqCode);
+								html=html.replace("#{aboutAnswer}", list[i].aboutAnswer);
+								$("#about-faq").append(html);
+							}
+							;
+						},
+					});
+		};
+	</script>
+
+</body>
+</html>

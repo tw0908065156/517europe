@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.aeurope.mapper.OrderCalculateMapper">
+
+
+	<!-- 將用戶購物車中城市資料插入計算器臨時表 -->
+	<!-- Integer insertCalculateFromCart(Integer clientId); -->
+	<insert id="insertCalculateFromCart">
+		INSERT INTO t_calculate_temp
+		(scode, stime, hotel_weights, bus_weights)
+		SELECT * FROM
+			(SELECT t_scart.scode, stime, hotel_weights, bus_weights
+			FROM t_scart
+			LEFT JOIN t_scenic
+			ON t_scart.scode=t_scenic.scode
+			WHERE  t_scart.scode like "%00000%"  and
+			client_id=#{clientId}
+			)
+		AS ctb
+	</insert>
+
+	<!-- 清空計算器臨時表 -->
+	<!--Integer deleteAllFromCalculate(); -->
+	<delete id="deleteAllFromCalculate">
+		DELETE FROM t_calculate_temp;
+	</delete>	
+	
+	<!--修改各城市的停留天數 -->
+	<!--Integer updateStayDays(@Param("sdays") 
+		Integer sdays, @Param("limitRows") Integer limitRows, @Param("stimes") List<String> stimes); -->
+	<update id="updateStayDays" >
+	UPDATE t_calculate_temp
+	SET sdays=#{sdays}
+	WHERE stime IN
+		<foreach collection="stimes" item="stime"  open="(" separator="," close=")">
+             #{stime}
+        </foreach>	
+     LIMIT #{limitRows}		
+	</update>	
+
+	<!-- 獲取旅遊天數列表（由小到大） -->
+	<!-- List<CalculateTemp> selectStimeList(); -->
+	<select id="selectStimeList" resultType="cn.tedu.aeurope.entity.CalculateTemp" >
+	SELECT 
+		DISTINCT stime
+	FROM t_calculate_temp
+	ORDER BY stime
+	</select>
+	
+	<!--查詢全部sdays， 求合  -->
+	<!-- Integer SelectSumSdays(); -->
+	<select id="selectSumSdays" resultType="java.lang.Integer">
+		SELECT 
+			SUM(sdays) 
+		FROM t_calculate_temp		
+	</select>
+	
+	<!--查詢每人車資+住宿費 -->
+	<!-- Integer selectSumCalculate(@Param("hotelFare") float hotelFare, @Param("personFare") float personFare); -->
+	<select id="selectSumCalculate" resultType="java.lang.Integer">
+		SELECT
+			SUM(sdays * hotel_weights * #{hotelFare} + sdays * bus_weights * #{personFare})
+		FROM t_calculate_temp	
+	</select>
+	
+</mapper>

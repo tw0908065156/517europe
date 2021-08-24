@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我要去歐洲—regist</title>
+
+<!-- Font: Source Sans Pro -->
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet"
+	href="../../plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+
+</head>
+
+<body class="hold-transition layout-top-nav">
+	<!-- head.js -->
+	<div class="headerPage" id="headerPage">
+		<script type="text/javascript" src="head.js"></script>
+	</div>
+
+	<!-- body -->
+	<div
+		style="height: 600px; background-color: #d2e2f2; background-image: url(../../images/generic/bg_regist.jpg); padding-top: 30px; padding-bottom: 10px; padding-left: 360px; padding-right: 0px">
+		<div class="register-box" style="margin: auto">
+			<div class="register-logo">
+				<a href="europe-homepage.html"> <b>專業歐洲旅遊 <font
+						color=#ffa86e>私人訂製</font></b>
+				</a>
+			</div>
+
+			<div class="card"
+				style="background: white; opacity: 0.62; filter: Alpha(Opacity = 62, Style = 0)">
+				<div class="card-body register-card-body">
+					<form id="form-reg" method="post" role="form">
+						<p class="login-box-msg">
+							<b><font color=#0000fa>歡迎您註冊*成為我們的VIP客戶</font></b>
+						</p>
+						<div class="input-group mb-3">
+							<input name="clientEmail" type="email" class="form-control"
+								placeholder="请输入您的電子郵箱(*必填)">
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-envelope" style="color: #ffa86e"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="input-group mb-3">
+							<input name="clientPassword" type="text" class="form-control"
+								placeholder="請輸入您的密碼(*必填)">
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-lock" style="color: #ffa86e"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="input-group mb-3">
+							<input name="clientNickname" type="text" class="form-control"
+								placeholder="暱稱或您希望我們怎麼稱呼您(選填)">
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-user"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="input-group mb-3">
+							<input name="clientPhone" type="text" class="form-control"
+								placeholder="您的聯絡電話(選填)">
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-phone"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="input-group mb-3">
+							<select name="clientGender" class="form-control">
+								<option value="0">您的稱謂(選填)</option>
+								<option value="1">先生</option>
+								<option value="2">女士</option>
+								<option value="3">小姐</option>
+								<option value="4">太太</option>
+								<option value="5">同學</option>
+							</select>
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-speaker" style="padding-left: 130px"></span>
+								</div>
+							</div>
+						</div>
+
+
+
+						<div class="row">
+							<div class="col-8"></div>
+							<!-- /.col -->
+							<div class="col-4">
+								<button id="btn-reg" type="button"
+									class="btn btn-primary btn-block">註冊</button>
+							</div>
+							<!-- /.col -->
+						</div>
+					</form>
+
+
+
+					<a href="login.html" class="text-center"><b>已有註冊帳號*請前往登入頁面！</b></a>
+				</div>
+				<!-- /.form-box -->
+			</div>
+			<!-- /.card -->
+		</div>
+
+
+
+		<!-- /body -->
+	</div>
+
+	<!-- foot.js -->
+	<div class="footerPage">
+		<script type="text/javascript" src="foot.js"></script>
+	</div>
+
+	<!-- jQuery -->
+	<script src="../../plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../../dist/js/adminlte.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="../../dist/js/demo.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#btn-reg").click(function() {
+				$.ajax({
+					"url" : "/clients/regist",
+					"data" : $("#form-reg").serialize(),
+					"type" : "post",
+					"dataType" : "json",
+					"success" : function(json) {
+						if (json.state == 100) {
+							alert("註冊成功，歡迎加入歐洲旅遊私人定製！請登入！");
+							location.href = "/webs/login.html";
+						} else {
+							alert(json.message);
+						}
+					},
+				});
+			});
+		});
+	</script>
+
+</body>
+</html>

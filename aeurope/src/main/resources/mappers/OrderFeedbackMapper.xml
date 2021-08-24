@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.aeurope.mapper.OrderFeedbackMapper">
+
+
+	<!-- 查詢訂單資料表—之行程反饋 -->
+	<!-- OrderFeedback selectOrderFeedbackByid(Integer orderid); -->
+	<select id="selectOrderFeedbackByid" resultType="cn.tedu.aeurope.entity.OrderFeedback">
+		SELECT
+			feedback_name AS feedbackName,  feedback_pdf AS feedbackPdf,
+			add_append AS addAppend 
+		FROM	 t_order_feedback
+		WHERE orderid=#{orderid}
+		ORDER BY	
+			modified_time DESC 
+		LIMIT 0,1
+	</select>
+
+</mapper>

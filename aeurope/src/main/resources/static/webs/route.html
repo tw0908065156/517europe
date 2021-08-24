@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我要去歐洲—routes of europe travel</title>
+
+<!-- Font: Source Sans Pro -->
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet"
+	href="../../plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+<script type="text/javascript" src="head.js"></script>
+<script>
+	header();
+</script>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+	<!-- head.js -->
+	<div class="headerPage" id="headerPage"></div>
+	<!-- body -->
+	<div class="content-wrapper kanban">
+		<section class="content-header"
+			style="padding-left: 80px; margin-bottom: -10px;">
+			<h2>經典旅遊行程展示</h2>
+		</section>
+
+		<section class="content pb-3">
+			<div class="container-fluid h-100">
+
+				<div class="card card-row card-success">
+					<div class="card-header">
+						<h3 class="card-title">自然風光</h3>
+					</div>
+					<div class="card-body" id="route-type-1">
+						<div class="card">
+							<div class="card-body" style="padding: 0px; border-radius: 4px">
+								<a href="" style="color: green;"><img
+									src="../images/country/1003.jpg" alt="瑞士風光" width=100%>
+									<p style="margin: 5px">
+										<i class="fa fa-bell"></i><b> .德瑞湖光山色10天</b>
+									</p> </a>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+				<div class="card card-row card-secondary">
+					<div class="card-header" >
+						<h3 class="card-title">歷史/宗教</h3>
+					</div>
+					<div class="card-body" id="route-type-2">
+						<div class="card" >
+							<div class="card-body" style="padding: 0px; border-radius: 4px">
+							<a href="" style="color: #545454;"><img src="../images/country/1004.jpg" alt="義大利教堂" width=100%>
+							<p style="margin:5px">
+							<i class="fa fa-bell"></i><b> .愛義永恒11天</b>
+							</a>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+
+				<div class="card card-row card-warning">
+					<div class="card-header">
+						<h3 class="card-title">城堡/宮殿</h3>
+					</div>
+					<div class="card-body" id="route-type-3">
+						<div class="card ">
+							<div class="card-body" style="padding: 0px; border-radius: 4px">
+							<a href="" style="color:#EB9900;">
+								<img src="../images/country/1006.jpg" alt="新天鵝堡" width=100%>
+								<p style="margin:5px"><i class="fa fa-bell"></i><b> .德意志尋堡趣9天</b>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="card card-row card-primary">
+					<div class="card-header">
+						<h3 class="card-title">時尚購物</h3>
+					</div>
+					<div class="card-body" id="route-type-4">
+						<div class="card">
+							<div class="card-body" style="padding: 0px; border-radius: 4px">
+							<a href="" style="color:#0000EB;">
+							<img src="../images/country/1001.jpg" alt="巴黎" width=100%>
+							<p style="margin:5px"><i class="fa fa-bell"></i><b> .愛上巴黎輕鬆Go7天</b>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<!-- foot.js -->
+	<div class="footerPage">
+		<script type="text/javascript" src="foot.js"></script>
+	</div>
+
+	<!-- jQuery -->
+	<script src="../../plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../../dist/js/adminlte.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="../../dist/js/demo.js"></script>
+	
+	<script type="text/javascript">
+		var color= new Array();
+		color[1]="#00B200";
+		color[2]="#545454";
+		color[3]="#EB9900";
+		color[4]="#0000EB";
+		$(document).ready(function() {
+			for (var i = 1; i <5; i++){
+				var caid=i;
+			var color_route=color[i];
+			showRouteList(caid, color_route);
+			}
+		});
+
+		function showRouteList(caid, color_route) {
+			$.ajax({
+						"url" : "/routes/" + caid + "/get_route",
+						"type" : "get",
+						"dataType" : "json",
+						"success" : function(json) {
+							var list = json.data;
+							$("#route-type-"+caid).empty();
+							for (var j = 0; j < list.length; j++) {
+								var html = '<div class="card">'
+												+ '<div class="card-body" style="padding: 0px; border-radius: 4px">'
+												+ '<a href="#{routePdf}" style="color:' + color_route + ';">'
+												+ '<img src="#{routeImage}" alt="#{routeName}" width=100%>'
+												+ '<p style="margin: 5px">'
+												+ '<i class="fa fa-bell"></i><b> .#{routeName}</b>'
+												+ '</p> </a>'
+												+ '</div>'
+												+ '</div>';
+								html=html.replace("#{routePdf}", list[j].routePdf);
+								html=html.replace("#{routeImage}", list[j].routeImage);
+								html=html.replace("#{routeName}", list[j].routeName);
+								html=html.replace("#{routeName}", list[j].routeName);
+								$("#route-type-"+caid).append(html);
+							}
+							;
+						},
+					});
+		};
+	</script>
+	
+</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.aeurope.mapper.TravelDaysMapper">
+
+
+	<!-- 顯示旅遊天數列表（無參數） -->
+	<!-- List<TravelDays> listTravelDays(); -->
+	<select id="listTravelDays" resultType="cn.tedu.aeurope.entity.TravelDays">
+	SELECT
+		daysid,
+		travel_days AS travelDays,
+		stay_nights AS stayNights
+	FROM t_travel_days
+	WHERE dpriority>0
+	ORDER BY
+		dpriority DESC
+	</select>	
+		
+	<!-- 查詢旅遊天數(用於前端顯示) -->
+	<!-- String selectTravelDaysByid(Integer daysid); -->
+	<select id="selectTravelDaysByid" resultType="java.lang.String">
+		SELECT 
+			travel_days AS travelDays
+		FROM t_travel_days
+		WHERE stay_nights=#{daysid}
+	</select>	
+	
+</mapper>

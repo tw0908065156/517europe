@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.aeurope.mapper.AboutFAQMapper">
+
+	<!-- 顯示Q&A列表 -->
+	<!-- List<AboutFAQ> selectAboutFAQ(); -->
+	<select id="selectAboutFAQ" resultType="cn.tedu.aeurope.entity.AboutFAQ">
+		SELECT 
+			faq_code AS faqCode,
+			about_question AS aboutQuestion, 
+			about_answer AS aboutAnswer
+		FROM t_about_faq
+		WHERE faq_priority != 0
+		ORDER BY faq_priority DESC
+	</select>
+
+</mapper>

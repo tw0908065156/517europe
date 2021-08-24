@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.aeurope.mapper.OrderPaymentMapper">
+
+
+	<!-- 根據訂單id查詢付款資料 -->
+	<!-- List<OrderPayment> selectOrderPaymentByid(Integer orderid);; -->
+	<select id="selectOrderPaymentByid" resultType="cn.tedu.aeurope.entity.OrderPayment">
+		SELECT
+			payable_amount AS payableAmount, 
+			payment_amount AS paymentAmount, 
+			payment_time AS paymentTime
+		FROM t_order_payment
+		WHERE orderid=#{orderid}
+		ORDER BY payment_id 
+	</select>
+
+</mapper>

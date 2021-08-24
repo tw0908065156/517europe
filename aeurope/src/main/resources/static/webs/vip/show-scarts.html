@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>定製行程-查看已選景點</title>
+
+<!-- Font: Source Sans Pro -->
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet"
+	href="../../plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+<link rel="stylesheet" href="../../dist/css/table.min.css">
+<style type="text/css">
+table {
+	border-collapse: collapse;
+}
+
+td, th {
+	border: 1px solid #dddddd;
+}
+</style>
+</head>
+
+<body class="hold-transition layout-top-nav">
+	<!-- head.js -->
+	<div class="headerPage">
+		<script type="text/javascript" src="viphead.js"></script>
+	</div>
+
+	<!-- Main content -->
+	<div class="card card-solid "
+		style="margin-bottom: 0px; padding-bottom: 0px">
+		<div class="card-body" style="margin-bottom: 0px; padding-bottom: 0px">
+			<div class="row">
+
+				<div class="col-12 col-sm-6">
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-header">
+									<h3 class="card-title">您已選定的城市/景點明細</h3>
+
+									<div class="card-tools">
+										<a href="choose-scenic.html">
+											<button id="btn-add-othercoutry" type="button"
+												class="btn btn-block btn-success btn-sm">
+												<b>加選更多城市／景點</b>
+											</button>
+										</a>
+									</div>
+									<!-- /.card-header -->
+								</div>
+								<div class="card-body table-responsive p-0"
+									style="height: 1175px;">
+									<table class="table table-head-fixed text-nowrap"
+										id="scart-details">
+										<thead>
+											<tr>
+												<th class="text-center">國家</th>
+												<th class="text-center">城市/區域</th>
+												<th class="text-center">景點名稱</th>
+												<th class="text-center">參觀時間</th>
+												<th class="text-center">門票</th>
+												<th class="text-center">詳細介紹</th>
+												<th class="text-center">刪除</th>
+											</tr>
+										</thead>
+										<tbody id="list-scart">
+											<tr>
+
+												<td>#{ctname}</td>
+												<td>#{tname}</td>
+												<td>#{scenic}</td>
+												<td class="text-center">#{sctime}</td>
+												<td class="text-right">#{sticket}</td>
+												<td class="text-center"><a href="#{scenicWiki}"
+													target="_blank">More……</a></td>
+												<td class="text-center"><button type="button"
+														class="btn btn-default btn-sm">
+														<i class="far fa-trash-alt"></i>
+													</button></td>
+											</tr>
+
+										</tbody>
+									</table>
+								</div>
+								<!-- /.card-body -->
+							</div>
+							<!-- /.card -->
+						</div>
+					</div>
+				</div>
+				<form id="cart-order" class="col-md-6" onsubmit="return false;">
+
+					<!-- card  hotel-->
+					<div class="card card-info">
+						<div class="card-header">
+							<h3 class="card-title">您希望的住宿等級</h3>
+						</div>
+						<!-- radio -->
+						<div class="card-body">
+							<div id="hotel-radio"></div>
+							<input type="radio" value="99" name="hid" checked>
+							<label class="col-11"><input type="text" name="hotelAppend" 
+								class="form-control" placeholder="指定飯店或其他特殊需求"></label>
+							<!--/. radio -->
+						</div>
+						<!-- /.card hotel -->
+					</div>
+
+					<!-- card  day -->
+					<div class="card card-info">
+						<div class="card-header">
+							<h3 class="card-title">您預計的旅行天數</h3>
+							<h6>（*台灣出發日為第1天~返抵台灣為最後一天*歐洲住宿晚數通常為天數減3*）</h6>
+						</div>
+						<div class="card-body">
+							<div >
+							<span id="travel-days">
+							</span>
+									<input type="radio" value="99" name="daysid" checked> <label
+									class="col-3"><input type="text" class="form-control" name="daysAppend" 
+									placeholder="自定天數區間"></label>
+							</div>
+						</div>
+						<!-- /. card  day -->
+					</div>
+
+					<!-- card  number -->
+					<div class="card card-info">
+						<div class="card-header">
+							<h3 class="card-title">與您同行的親友人數</h3>
+							<h6>（*請選擇全部總人數*如為單數~請以多1位預估*）</h6>
+						</div>
+						<div class="card-body">
+							<div >
+							<span id="total-person"></span>
+								
+								<input type="radio" value="99" name="personid" checked>
+								<label class="col-3"><input type="text" name="personAppend"
+									class="form-control" placeholder="更多人數"></label>
+							</div>
+						</div>
+						<!-- /. card  number -->
+					</div>
+
+					<!-- card  button -->
+					<div class="card card-info">
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="card bg-light d-flex flex-fill" style="margin: 0">
+									<div class="card-body pt-0">
+										<div class="row">
+											<div class="card-header text-muted border-bottom-0"
+												style="margin: 0">
+												<h2 class="lead">
+													<b>沽算旅遊費用<span id="total-price"></span></b>
+												</h2>
+											</div>
+											<div class="col-7 text-sm" style="padding: 0px">
+												<b>
+													<p style="margin: 0 auto 4px auto; text-indent: -1em">※飯店依標準房型，兩人一間沽價</p>
+													<p style="margin: 0 auto 4px auto; text-indent: -1em">※依人數搭配適合車型</p>
+													<p style="margin: 0 auto 4px auto; text-indent: -1em">※10人以下不含領隊，11~15人有沽算領隊費用</p>
+													<p style="margin: 0 auto 4px auto; text-indent: -1em">※預沽費用不含機票，不含小費</p>
+													<p style="margin: 0 auto; text-indent: -1em">※電腦自動沽算費用僅供參考，請以實際反饋報價為準</p>
+												</b>
+											</div>
+											<div class="col-5 text-center">
+												<button id="cart-calculate"
+													style="border-style: none; background-color: transparent">
+													<img src="../../images/generic/calculate.jpg" alt="試算價格"
+														class="img-circle img-fluid">
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-sm-6">
+								<div class="card bg-light d-flex flex-fill" style="margin: 0">
+									<div class="card-body pt-0">
+										<div class="row">
+											<div class="card-header text-muted border-bottom-0"
+												style="margin: 0 auto">
+												<h2 class="lead">
+													<b>提交選單，定製您的專屬行程</b>
+												</h2>
+											</div>
+											<div class="col-5 text-center">
+												<button id="cart-submit"
+													style="border-style: none; background-color: transparent">
+													<img src="../../images/generic/submit.jpg" alt="提交選單"
+														class="img-circle img-fluid">
+												</button>
+											</div>
+											<div class="col-7 text-sm" style="padding-left: 5px">
+												<b>
+													<p style="margin: 0 auto 7px auto; text-indent: -1em">◎請選擇您對航班的偏好並告知我們您的其他需求</p>
+													<p style="margin: 0 auto 7px auto; text-indent: -1em">◎我們的專業團隊將幫您設計出最適宜的行程並提供準確報價
+														(約需3個工作日)</p>
+													<p style="margin: 0 auto 1px auto; text-indent: -1em">◎您可以在email信箱或回來我們的網站查詢反饋</p>
+												</b>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /. card  button -->
+					</div>
+
+					<!-- card flights and other -->
+					<div class="card card-info">
+						<div class="card-header">
+							<h3 class="card-title">關於航班以及您的其他需求</h3>
+						</div>
+						<div class="card-body">
+							<div class="form-group" style="border: 1px #ffa86e dashed">
+								<label class="col-form-label"
+									style="border-right: 1px #ffa86e dashed; border-bottom: 1px #ffa86e dashed"><i
+									class="fas fa-plane" style="color: #ffa86e"></i>
+									台灣飛往歐洲的航班簡介*請選擇您偏好的方式及航空公司*</label>
+								<div id="flights-type">
+								
+								</div>	
+							</div>
+
+
+							<div class="form-group">
+								<label class="col-form-label" style="color: #ffa86e;"><i
+									class="far fa-bell" style="color: #ffa86e"></i>
+									您的其他需求或要提醒我們注意的事項</label>
+								<textarea class="form-control" rows="3" name="otherAppend" 
+									placeholder="1.實際人數5人，需求1間雙人房+1間3人房"></textarea>
+							</div>
+						</div>
+						<!-- /. card flights and other -->
+					</div>
+
+				</form>
+			</div>
+		</div>
+		<!-- foot.js -->
+		<div class="footerPage">
+			<script type="text/javascript" src="../foot.js"></script>
+		</div>
+
+		<!-- REQUIRED SCRIPTS -->
+
+		<!-- jQuery -->
+		<script src="../../plugins/jquery/jquery.min.js"></script>
+		<!-- Bootstrap 4 -->
+		<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<!-- AdminLTE App -->
+		<script src="../../dist/js/adminlte.min.js"></script>
+		<script src="../../dist/js/table.min.js"></script>
+		<!-- AdminLTE for demo purposes -->
+		<script src="../../dist/js/demo.js"></script>
+
+		<script type="text/javascript">
+		var stayNights=99;
+		var hid=99;
+		var personid=99;
+			$(document).ready(function() {
+				showScartDetails();
+				showHotelGrades();
+				showTravelDays();
+				showPersonNumber();
+				showFlightsType();
+				$('#scart-details').Table({
+					"autoWidth" : false,
+					"columnDefs" : [ {
+						"width" : "15%",
+						"orderable" : false,
+						"targets" : 0
+					}, {
+						"width" : "15%",
+						"orderable" : false,
+						"targets" : 1
+					}, {
+						"width" : "28%",
+						"orderable" : false,
+						"targets" : 2
+					}, {
+						"width" : "12%",
+						"orderable" : false,
+						"targets" : 3
+
+					}, {
+						"width" : "10%",
+						"orderable" : false,
+						"targets" : 4
+					}, {
+						"width" : "10%",
+						"orderable" : false,
+						"targets" : 5
+					}, {
+						"width" : "10%",
+						"orderable" : false,
+						"targets" : 6
+					} ]
+
+				});
+
+			});
+
+			function showScartDetails() {
+				$
+						.ajax({
+							"url" : "/scarts/list-scart",
+							"type" : "get",
+							"dataType" : "json",
+							"success" : function(json) {
+								var list = json.data;
+								$("#list-scart").empty();
+								for (var i = 0; i < list.length; i++) {
+									var html = '<tr>'
+											+ '<td>'
+											+ ((list[i].scenic) ? ""
+													: list[i].ctname)
+											+ '</td>'
+											+ '<td>'
+											+ list[i].tname
+											+ '</td>'
+											+ '<td>'
+											+ ((list[i].scenic) ? list[i].scenic
+													: "")
+											+ '</td>'
+											+ '<td class="text-center">'
+											+ ((list[i].stime) ? list[i].stime
+													: "")
+											+ '</td>'
+											+ '<td class="text-right">'
+											+ ((list[i].sticket) ? list[i].sticket
+													: "")
+											+ '</td>'
+											+ '<td class="text-center"><a href="'
+											+ ((list[i].scenicWiki) ? list[i].scenicWiki
+													: "")
+											+ '"  target="_blank">More……</a></td>'
+											+ '<td class="text-center" ><button onclick= "deleteByCartid(#{cartid})"  type="button" class="btn btn-default btn-sm"> <i class="far fa-trash-alt"></i> </button></td>'
+											+ '</tr>';
+									html = html.replace("#{cartid}",
+											list[i].cartid);
+
+									$("#list-scart").append(html);
+								}
+								;
+							},
+						});
+			};
+
+			function deleteByCartid(cartid) {
+				$.ajax({
+					"url" : "/scarts/" + cartid + "/delete_by_cartid",
+					"type" : "get",
+					"dataType" : "json",
+					"success" : function(json) {
+						if (json.state == 100) {
+							showScartDetails();
+						} else {
+							alert(json.message);
+						}
+					},
+					"error" : function() {
+						alert("您的登入信息已過期，請重新登入！");
+						location.href = "/webs/login.html";
+					}
+				});
+			};
+
+			function showHotelGrades() {
+				$.ajax({
+							"url" : "/hotels/",
+							"type" : "get",
+							"dataType" : "json",
+							"success" : function(json) {
+								var list = json.data;
+								$("#hotel-radio").empty();
+								for (var i = 0; i < list.length; i++) {
+									var html = '<input type="radio" value="'+list[i].hid+'"  name="hid">'
+											+ '<label class="col-3">'
+											+ list[i].hotelGrade + '</label>'
+									$("#hotel-radio").append(html);
+								};
+							},
+						});
+				
+			};
+			
+			function showTravelDays() {
+				$.ajax({
+							"url" : "/traveldays/",
+							"type" : "get",
+							"dataType" : "json",
+							"success" : function(json) {
+								var list = json.data;
+								$("#travel-days").empty();
+								for (var i = 0; i < list.length; i++) {
+									var html=
+										'<input type="radio" value="'+list[i].stayNights+'" name="daysid"> <label class="col-1">'+list[i].travelDays+'</label>';
+									$("#travel-days").append(html);
+								};
+							},
+						});
+			};
+			
+			function showPersonNumber() {
+				$.ajax({
+							"url" : "/person_numbers/",
+							"type" : "get",
+							"dataType" : "json",
+							"success" : function(json) {
+								var list = json.data;
+								$("#total-person").empty();
+								for (var i = 0; i < list.length; i++) {
+									var html=
+										'<input type="radio" value="'+list[i].personid+'" name="personid"> <label class="col-1">'+list[i].totalPerson+'</label> ';
+									$("#total-person").append(html);
+								};
+							},
+						});
+			};			
+			
+			function showFlightsType() {
+				$.ajax({
+							"url" : "/flights/",
+							"type" : "get",
+							"dataType" : "json",
+							"success" : function(json) {
+								var list = json.data;
+								$("#flights-type").empty();
+								for (var i = 0; i < list.length; i++) {
+									if(list[i].flightsType){
+										var flightString=list[i].flightsType + ((list[i].flightsName)? ("("+list[i].flightsName+")") : "") + ":" + list[i].transferType;
+										html='<p'+ ((list[i].flightsName)?  '><input  ' : ' style="margin: 0 auto"><input id="checkAll" onchange="checkAllChange()" ' ) + ' name="flightsidList" type="checkbox" value="#{list[i].flightsid}">'+ flightString+'</p>'
+											}else{
+										var flightString=list[i].flightsName+list[i].flightsCode+":"+list[i].transferType;
+										html='<p  style="margin:0 0 0 45px"><input  class="transferFlight" onchange="checkItemChange()" name="flightsidList"   type="checkbox" value="#{list[i].flightsid}">'+ flightString+'</p>'
+									}
+									html=html.replace("#{list[i].flightsid}", list[i].flightsid);
+									$("#flights-type").append(html);
+								};
+							},
+						});			   
+			};	
+			
+			
+			function checkAllChange(){
+				if($("#checkAll").prop("checked")){
+					$(".transferFlight").prop("checked", true);
+				}else{
+					$(".transferFlight").prop("checked", false);
+				}
+			};
+			
+			function checkItemChange(){
+				var checklength=0;
+				var transferlength=$(".transferFlight").length;
+				if(! ($(this).prop("checked"))){
+					$("#checkAll").prop("checked", false);
+				}
+				for(var i=0; i<transferlength; i++){
+					var transfercheck = ($(".transferFlight:eq("+i+")").prop("checked"));
+					if(transfercheck){
+					checklength++;
+					}
+				}
+				if(checklength ==  transferlength){
+					$("#checkAll").prop("checked", true);
+				}				
+			};
+			
+			$("#cart-calculate").click(function(){
+				hid= $("input[name='hid']:checked").val();
+				stayNights=$("input[name='daysid']:checked").val();
+				personid=$("input[name='personid']:checked").val();
+				$.ajax({
+					"url":"/order_calculate/"+stayNights+"/"+hid+"/"+personid+"/temp",
+					"type":"get",
+					"dataType":"json",
+					"success":function(json){
+						if(json.state==100){
+							alert(json.data);
+						}else{
+							alert(json.message);
+						}
+					},	
+				});
+			});
+			
+
+			$("#cart-submit").click(function(){
+				$.ajax({
+					"url":"/orders/add_cart_order",
+					"data" : $("#cart-order").serialize(),
+					"type":"post",
+					"dataType":"json",
+					"success":function(json){
+						if(json.state==100){
+							location.href = "/webs/vip/order-feedback.html";							
+						}else {
+							if(json.state==216){
+								alert(json.message);
+								location.href = "/webs/vip/choose-scenic.html";
+							}else{
+								alert(json.message);
+							}
+						}
+					},	
+				});
+			});
+
+		</script>
+	</div>
+</body>
+</html>

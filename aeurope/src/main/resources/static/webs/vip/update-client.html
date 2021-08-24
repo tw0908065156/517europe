@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我要去歐洲—更新客戶資料</title>
+
+<!-- Font: Source Sans Pro -->
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet"
+	href="../../plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+
+</head>
+
+<body class="hold-transition layout-top-nav">
+	<!-- head.js -->
+	<div class="headerPage">
+		<script type="text/javascript" src="viphead.js"></script>
+	</div>
+
+	<!-- body -->
+	<div
+		style="height: 600px; background-color: #d2e2f2; background-image: url(../../images/generic/bg_regist.jpg); padding-top: 30px; padding-bottom: 10px; padding-left: 360px; padding-right: 0px">
+		<div class="register-box" style="margin: auto">
+			<div class="register-logo">
+				<a href="europe-homepage.html"> <b>專業歐洲旅遊 <font
+						color=#ffa86e>私人訂製</font></b>
+				</a>
+			</div>
+
+			<div class="card"
+				style="background: white; opacity: 0.62; filter: Alpha(Opacity = 62, Style = 0)">
+				<div class="card-body register-card-body">
+					<form id="form-update" method="post" role="form">
+						<p class="login-box-msg">
+							<b><font color=#0000fa>請更新您的個人資料</font></b>
+						</p>
+
+						<div class="input-group mb-3">
+							<input id="inp-clientemail" name="clientEmail" type="email"
+								class="form-control">
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-envelope" style="color: #ffa86e"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="input-group mb-3">
+							<input id="inp-clientpassword" name="clientPassword" type="text"
+								class="form-control" placeholder="如需修改，請直接輸入您的新密碼">
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-lock" style="color: #ffa86e"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="input-group mb-3">
+							<input id="inp-clientnickname" name="clientNickname" type="text"
+								class="form-control" placeholder="暱稱或您希望我們怎麼稱呼您(選填)">
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-user" style="color: #ffa86e"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="input-group mb-3">
+							<input id="inp-clientphone" name="clientPhone" type="text"
+								class="form-control" placeholder="您的聯絡電話(選填)">
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-phone" style="color: #ffa86e"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="input-group mb-3">
+							<select id="inp-gender" name="clientGender" class="form-control">
+								<option value="0">您的稱謂(選填)</option>
+								<option value="1">先生</option>
+								<option value="2">女士</option>
+								<option value="3">小姐</option>
+								<option value="4">太太</option>
+								<option value="5">同學</option>
+							</select>
+							<div class="input-group-append">
+								<div class="input-group-text">
+									<span class="fas fa-speaker" style="padding-left: 130px"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-8"></div>
+							<div class="col-4">
+								<button id="btn-update-client" type="button"
+									class="btn btn-primary btn-block">確認修改</button>
+
+							</div>
+						</div>
+
+					</form>
+					<!-- /.card body-->
+				</div>
+				<!-- /.card-->
+			</div>
+			<!-- /.register-box-->
+		</div>
+		<!-- /.body -->
+	</div>
+
+	<!-- foot.js -->
+	<div class="footerPage">
+		<script type="text/javascript" src="../foot.js"></script>
+	</div>
+
+	<!-- jQuery -->
+	<script src="../../plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../../dist/js/adminlte.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="../../dist/js/demo.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			showClientInfo();
+			$("#btn-update-client").click(function() {
+				$.ajax({
+					"url" : "/clients/update_client",	
+					"data" : $("#form-update").serialize(),
+					"type" : "post",
+					"dataType" : "json",
+					"success" : function(json) {
+						if (json.state == 100) {
+							alert("用戶資料修改成功！");
+						//跳轉到登入後的首頁;
+							location.href="/webs/vip/vip-homepage.html"
+						} else {
+							alert(json.message);
+						}
+					},
+				});
+			});
+		});
+		
+		function showClientInfo(){
+			$.ajax({
+				"url" : "/clients/get_info",				
+				"type" : "get",
+				"dataType" : "json",
+				"success" : function(json) {
+					if (json.state == 100) {
+						$("#inp-clientemail").val(json.data.clientEmail);
+						$("#inp-clientnickname").val(json.data.clientNickname);
+						$("#inp-clientphone").val(json.data.clientPhone);
+						$("#inp-gender").val(json.data.clientGender);
+					} else {
+						alert(json.message);
+					}
+				},
+			});
+		};
+	</script>
+
+</body>
+</html>
