@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我要去歐洲—多元支付方式</title>
+
+<!-- Font: Source Sans Pro -->
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet"
+	href="../../plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+
+</head>
+
+<body class="hold-transition layout-top-nav">
+	<!-- head.js -->
+	<div class="headerPage">
+		<script type="text/javascript" src="viphead.js"></script>
+	</div>
+
+	<!-- body -->
+	<div class="row" style="margin-left:10px; margin-top:10px; margin-right:10px;">
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-bullhorn" style="color: #ffa86e"></i>
+                	<strong>請再次核對您的訂單信息</strong> 
+                </h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table class="table table-bordered table-head-fixed ">
+					<tbody id="order-details">
+						<!-- function showOrderList() -->
+					</tbody>
+				</table>
+				<div  class="card-header" style="padding-left:100px">
+				<h3 class="card-title" >
+                  <i class="icon fas fa-exclamation-triangle" style="color: red"></i>
+                	<strong>請務必詳閱右側付款說明</strong>
+                </h3>
+                </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- ./col -->
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="icon fas fa-check" style="color: green"></i>
+                	<strong>付款方式一（銀行轉帳）</strong> 
+                </h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+				<label class="col-form-label"><i class="far fa-envelope" style="color: green"></i>
+				 我們將發送銀行帳戶資料到您的email地址：</br><span id="clientEmail" style="margin-left:25px"></span>
+				 </label>
+				<input id="inp-othermail" type="text" class="form-control"  placeholder="如您需要同時發送至其他email,請在此填入（選填）">
+				<div class="row" style="margin-top:15px">
+					<div class="col-6">
+					</div>
+					<div class="col-6">
+					<button id="btn-send-transfer-info" type="button" class="btn btn-success btn-block" >發送轉帳信息到Email</button>
+					</div>
+					</div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+            <div class="card" style="margin-top:50px">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="icon fas fa-check" style="color: green"></i>
+                	<strong>付款方式二（LinePay掃碼付款）</strong> 
+                </h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body row">
+              <div style="width:45%;">
+                <h5>
+                <ul  >
+                <li style= "margin-top:26px;">添加Line好友</li>
+               <li style= "margin-top:26px;"> 打開LINE Pay</br>（Line錢包）</li>
+                <li style= "margin-top:26px;">掃描右側QR Code</li>
+                <li style= "margin-top:26px;">轉帳付款</li>
+                </ul>
+                </h5>
+                </div>
+                <img src="../../images/credit/LinepayQrCode.jpg" alt="LinePayQrCode付款碼" width=55%>
+              </div>
+              <!-- /.card-body -->
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-bullhorn" style="color: #ffa86e"></i>
+                	<strong>付款說明（請務必詳閱）</strong> 
+                </h3>
+              </div>
+              <!-- /.card-header -->
+    
+              <div class="card-body" style="padding: 0px; border-radius: 4px">
+                <img src="../../images/credit/rule.jpg" alt="付款說明" width=100%>
+              <!-- /.card-body -->
+            </div>
+             </div>
+            <!-- /.card -->
+          </div>
+          <!-- ./col -->
+        </div>
+
+	<!-- foot.js -->
+	<div class="footerPage">
+		<script type="text/javascript" src="../foot.js"></script>
+	</div>
+
+	<!-- jQuery -->
+	<script src="../../plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../../dist/js/adminlte.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="../../dist/js/demo.js"></script>
+	<script src="../../dist/js/jquery-getUrlParam.js"></script>
+
+	<script type="text/javascript">
+	var orderid = $.getUrlParam("orderid").substring(0,2);
+		$(document).ready(function() {
+			showOrderList();
+		});
+
+		function showOrderList() {
+			$.ajax({
+				"url" : "/order_payment/" + orderid + "/get_order_details",
+				"type" : "get",
+				"dataType" : "json",
+				"success" : function(json) {
+						var list = json.data;
+						$("#order-details").empty();
+						var html = '<tr>'
+					+ '<td align="center" valign="center"><strong>訂單日期</strong></td>'
+					+ '<td>' + list.dateFmt + '</td>'
+					+ '</tr>'
+					+ '<tr>'
+					+ '<td align="center" valign="center"><strong>已選城市</br>(或區域)</strong></td>'
+					+ '<td>' + list.townDetails + '</td>'
+					+ '</tr>'
+					+ '<tr>'
+					+ '<td align="center" valign="center"><strong>旅行天數</strong></td>'
+					+ '<td>' + list.daysAppend + '</td>'
+					+ '</tr>'
+					+ '<tr>'
+					+ '<td align="center" valign="center"><strong>貴賓人數</strong></td>'
+					+ '<td>' + list.personAppend + '</td>'
+					+ '</tr>'
+					+ '<tr>'
+					+ '<td align="center" valign="center"><strong>飯店等級</strong></td>'
+					+ '<td>' + list.hotelAppend + '</td>'
+					+ '</tr>'
+					+ '<tr>'
+					+ '<td align="center" valign="center"><strong>航班偏好</strong></td>'
+					+ '<td>' + list.flightsAppend + '</td>'
+					+ '</tr>'
+					+ '<tr>'
+					+ '<td align="center" valign="center"><strong>訂單備註</strong></td>'
+					+ '<td>' + list.otherAppend + '</td>'
+					+ '</tr>'
+					+ '<tr>'
+					+ '<td align="center" valign="center"><strong>行程反饋</strong></td>'
+					+ '<td>'+((list.feedbackName)? '<a href="' + list.feedbackPdf + '" target="_blank">' + list.feedbackName + '<i class="fas fa-paperclip"></i></a>' : '')+'</td>'
+					+ '</tr>'
+					+ '<tr>'
+					+ '<td align="center" valign="center"><strong>訂單狀態</strong></td>'
+					+ '<td>' + list.orderStatusDesc + '</td>'
+					+ '</tr>'
+					+ '<tr>'
+					+ '<td align="center" valign="center"><strong>應付訂金</strong></td>'
+					+ '<td> <strong> '+ list.payableAmount + '</strong></td>'
+					+ '</tr>';
+					
+					
+				$("#order-details").append(html);
+				$("#clientEmail").append(list.clientEmail);
+					
+					},
+					});
+			
+			$("#btn-send-transfer-info").click(function() {
+				var otherEmail = "tw517europe@foxmail.com";
+				var EmailNotNull =$("#inp-othermail").val();
+				if(EmailNotNull.length > 0)
+					{otherEmail = EmailNotNull;}
+				$.ajax({
+					"url" : "/send_payment_mail/",
+					"data" : {"otherEmail":otherEmail, "orderid":orderid},
+					"type" : "post",
+					"dataType" : "json",
+					"success" : function(json) {
+						if (json.state == 100) {
+							alert("轉帳資訊發送成功！");
+							//location.href = "/webs/vip/vip-homepage.html";
+						} else {
+							alert(json.message);
+						}
+					},
+				});				
+			});
+		};
+		
+		
+</script>
+</body>
+</html>

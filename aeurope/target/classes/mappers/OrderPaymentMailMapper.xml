@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.aeurope.mapper.OrderPaymentMailMapper">
+
+	<!-- email發送付款帳號後存入資料到數據表 -->
+	<!-- Integer insertOrderPaymentMail(OrderPaymentMail orderPaymentMail); -->
+	<insert id="insertOrderPaymentMail" useGeneratedKeys="true" keyProperty="paymentMailId">
+		INSERT INTO
+			t_order_payment_mail
+		(
+			orderid, client_email, 
+			other_email, send_time		
+		)VALUES (
+			#{orderid}, #{clientEmail}, 
+			#{otherEmail}, #{sendTime} 
+		)
+	</insert>
+	
+	
+	<!--根據orderid查詢已發送mail的OtherMailList-->
+	<!-- List<String> selectOtherMailList(Integer orderid); -->
+	<select id="selectOtherMailList" resultType="java.lang.String">
+		SELECT
+			other_email AS otherEmail
+		FROM t_order_payment_mail
+		WHERE orderid = #{orderid}
+		ORDER BY send_time
+	</select>
+
+</mapper>

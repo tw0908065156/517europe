@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.aeurope.mapper.OrderAppendMapper">
+
+
+	<!-- 在訂單補充備註表中添加資料 -->
+	<!-- Integer insertOrderAddappend(OrderAddAppend  orderAddAppend); -->
+	<insert id="insertOrderAddappend" useGeneratedKeys="true" keyProperty="orderAddappendId">
+	INSERT INTO t_order_addappend
+		(
+		orderid, add_append, 
+		created_user, created_time, 
+		modified_user, modified_time		
+		)VALUES(
+		#{orderid}, #{addAppend}, 
+		#{createdUser}, #{createdTime}, 
+		#{modifiedUser}, #{modifiedTime}	
+		)		
+	</insert>
+
+</mapper>

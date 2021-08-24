@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.aeurope.mapper.CountryMapper">
+
+	<!-- 顯示國家列表（無參數） -->
+	<!-- List<Country> listFromCountry(); -->
+	<select id="listFromCountry" resultType="cn.tedu.aeurope.entity.Country">
+		SELECT
+			cid, ccode, cname, country_image AS countryImage
+		FROM t_country
+		WHERE cpriority>0
+		ORDER BY 
+			cpriority DESC			
+	</select>
+
+
+</mapper>

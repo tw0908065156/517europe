@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我要去歐洲—contact us</title>
+
+<!-- Font: Source Sans Pro -->
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet"
+	href="../../plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+
+<style type="text/css">
+	.myinput{
+		width:100%; height:40px;
+		border-style:solid; border-color:#CFCFCF; border-width:1px; border-radius: 4px;}
+	.myinput:focus {outline:none; border:1px solid #4545FF;}
+</style>
+
+<script type="text/javascript" src="head.js"></script>
+<script>
+	header();
+</script>
+</head>
+
+<body class="hold-transition layout-top-nav">
+	<!-- head.js -->
+	<div class="headerPage" id="headerPage"></div>
+	<!-- body -->
+	<section class="content-header">
+		<div class="col-sm-6">
+			<h1>聯絡我們 Contact us</h1>
+		</div>
+		<!-- /.container-fluid -->
+	</section>
+	<section class="content">
+
+		<!-- Default box -->
+		<div class="card">
+			<div class="card-body row">
+				<div
+					class="col-5 text-center d-flex align-items-center justify-content-center">
+					<div class="">
+						<img src="../../images/generic/logo_oval.png" alt="517Europe Logo"
+							class="brand-image img-circle elevation-3"
+							style="opacity: .8; width: 60%">
+						<h2>
+							517<strong>Europe</strong>
+						</h2>
+						<h4>
+							<strong>我要去歐洲</strong>—專業歐洲旅遊私人訂製
+						</h4>
+						<p class="lead mb-5">
+							地址ADD：台北市中正區忠孝西路一段102號<br> 電話TEL: +886 (0) 2 12345678
+						</p>
+					</div>
+				</div>
+				<div class="col-7">
+				<form  id="form-message">
+					<div class="form-group">
+						<label >姓名｜Name</label>
+						 <input class="myinput" type="text"  name="clientNickname"  >
+					</div>
+					<div class="form-group">
+						<label for="inputEmail">電子郵箱（或聯絡電話）｜E-Mail (or Contact
+							number)</label> <input type="text" name="clientEmail"
+							class="myinput">
+					</div>
+					<div class="form-group">
+						<label for="inputSubject">主旨｜Subject</label> <input id="message-subject" type="text"
+							name="messageSubject" class="myinput">
+					</div>
+					<div class="form-group">
+						<label for="inputMessage">內容｜Message</label>
+						<textarea id="message-detail" name="messageDetail" class="myinput" rows="4"  style="height:120px;"
+							placeholder="請在此提出您的問題/意見/建議，非常感謝！&#13 Please ask your questions/comments/suggestions here, thank you very much! "></textarea>
+					</div>
+					<div class="form-group">
+						<input type="button" id="btn-message" class="btn btn-primary"
+							value="提交信息">
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- /body -->
+	<!-- foot.js -->
+	<div class="footerPage">
+		<script type="text/javascript" src="foot.js"></script>
+	</div>
+
+	<!-- jQuery -->
+	<script src="../../plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../../dist/js/adminlte.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="../../dist/js/demo.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#btn-message").click(function() {
+				var messageSubject = $("#message-subject").val();
+				var messageDetail = $("#message-detail").val();
+				if(messageDetail.length<1 && messageSubject.length<1){
+					alert("您尚未填寫任何信息……期待您寶貴的意見/建議，非常感謝！");
+				}else{
+				$.ajax({
+					"url" : "/contact_message/",
+					"data" : $("#form-message").serialize(),
+					"type" : "post",
+					"dataType" : "json",
+					"success" : function(json) {
+						if (json.state == 100) {
+							alert("我們已收到您提交的信息，非常感謝！");
+							location.href = "/webs/europe-homepage.html";
+						} else {
+							alert(json.message);
+						}
+					},
+				});
+				}
+			});
+			
+			});
+	</script>
+
+</body>
+</html>

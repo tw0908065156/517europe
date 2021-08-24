@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.aeurope.mapper.ClientMapper">
+
+	<!-- 插入用戶 -->
+	<!--Integer insert(Client client) -->
+	<!-- keyProperty是Client中的屬性, 功能是返回Id值 -->
+	<insert id="insert" useGeneratedKeys="true" keyProperty="clientId">
+		INSERT 	INTO 
+			t_client
+		(
+			client_email, client_password,
+			ps_salt, client_nickname,
+			client_phone, client_gender,
+			is_delete, created_user,
+			created_time, modified_user,
+			modified_time
+		) VALUES (
+			#{clientEmail}, #{clientPassword},
+			#{psSalt}, #{clientNickname},
+			#{clientPhone}, #{clientGender},
+			#{isDelete}, #{createdUser},
+			#{createdTime}, #{modifiedUser},
+			#{modifiedTime}
+		)
+	</insert>
+
+	<!-- 更新用戶資料 -->
+	<!--Integer updateClient(Client updateClient);-->
+	<update id="updateClient" >	
+		UPDATE t_client 
+		SET 
+		  client_email=#{clientEmail},
+		  client_password=#{clientPassword},
+		  client_nickname=#{clientNickname},
+		  client_phone=#{clientPhone},
+		  client_gender=#{clientGender},
+		  modified_user=#{modifiedUser},
+		  modified_time= #{modifiedTime}
+		WHERE 
+		  client_id=#{clientId}
+	</update>
+	
+	<!-- 更改密碼 -->
+	<!-- Integer updatePassword(@Param("clientEmail") String clientEmail, 
+			@Param("newPasswordMd5")  String newPasswordMd5);-->
+	<update id="updatePassword">
+		UPDATE t_client 
+		SET 
+		  client_password=#{newPasswordMd5}
+		WHERE 
+		  client_email=#{clientEmail}
+	</update>		
+	
+	<!-- 根據client_id查詢用戶資料 -->
+	<!--Client findByClientId(Integer clientId); -->
+	<select id="findByClientId" resultType="cn.tedu.aeurope.entity.Client">	
+		SELECT 
+		    client_id AS clientId,
+		    client_email AS clientEmail, 
+			client_password AS clientPassword,
+		    ps_salt AS psSalt, 
+		    client_nickname AS clientNickname,
+		    client_phone  AS clientPhone,
+			client_gender AS clientGender,
+		    is_delete AS isDelete 
+		FROM t_client
+		WHERE client_id=#{clientId}
+	</select>
+
+	<!-- 根據email查詢用戶資料 -->
+	<!--Client findByClientemail(String clientEmail) -->
+	<select id="findByClientEmail" resultType="cn.tedu.aeurope.entity.Client">
+		SELECT 
+			client_id AS clientId,
+			client_email AS clientEmail, 
+			client_password AS clientPassword,
+		    ps_salt AS psSalt, 
+		    client_nickname AS clientNickname,
+		    is_delete AS isDelete
+		FROM t_client
+		WHERE client_email=#{clientEmail}
+	</select>
+
+</mapper>

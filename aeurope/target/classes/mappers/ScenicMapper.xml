@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.aeurope.mapper.ScenicMapper">
+
+	<!-- 根據國家代碼獲取城市和景點明細 -->
+	<!--List<Scenic> findByCcode(String ccode); -->
+	<select id="findByCcode" resultType="cn.tedu.aeurope.entity.Scenic">
+		SELECT
+			sid, ccode, cname,
+			tcode, tname, tpriority,
+			scenic, unesco, sticket,
+			stime, highlights, scenic_wiki AS scenicWiki,
+			spriority, scode
+		FROM t_scenic
+		WHERE ccode=#{ccode}
+		ORDER BY tpriority DESC, spriority DESC			
+	</select>
+
+</mapper>

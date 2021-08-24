@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>景點明細</title>
+
+<!-- Font: Source Sans Pro -->
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome -->
+<link rel="stylesheet"
+	href="../../plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+<link rel="stylesheet" href="../../dist/css/table.min.css">
+<style type="text/css">
+table {
+	border-collapse: collapse;
+}
+
+td, th {
+	border: 1px solid #dddddd;
+}
+</style>
+</head>
+
+<body class="hold-transition sidebar-collapse layout-top-nav">
+	<!-- head.js -->
+	<div class="headerPage">
+		<script type="text/javascript" src="viphead.js"></script>
+	</div>
+
+	<!-- body -->
+	<div  style="margin-left: 15px; margin-right: 15px">
+		<!-- card-header -->
+		<div class="card-header ui-sortable-handle"
+			style="padding-bottom: 20px">
+			<h3 class="card-title" id="cname"></h3>
+			<div class="card-tools">
+				<ol class="pagination pagination-sm">
+					<li class="no-bullet"><button id="btn-add-othercoutry" type="button"
+							class="btn btn-block btn-success btn-sm">
+							<b>加選其他國家(地區)</b>
+						</button></li>
+					<li >&nbsp&nbsp&nbsp</li>
+					<!-- 提交按扭 -->
+					<li class="no-bullet" ><button id="btn-add-scart" type="button"
+							class="btn btn-block btn-outline-danger btn-sm">
+							<b>選取完成！試算價格</b>
+						</button></li>
+					<li>&nbsp</li>
+				</ol>
+			</div>
+		</div>
+		<!-- ./card-header -->
+		<p></p>
+		 <div class="card-body table-responsive p-0" style="height:600px;">
+		<table id="scenic"  class="table table-head-fixed text-nowrap" style="width: 100%">
+
+			<thead>
+				<tr class="text-center">
+					<th>選取</th>
+					<th>城市/區域</th>
+					<th>景點名稱</th>
+					<th>世界遺產</th>
+					<th>門票</th>
+					<th>參觀時間</th>
+					<th>特色/亮點</th>
+					<th>詳細介紹</th>
+				</tr>
+			</thead>
+			<tbody id="scenic-details"  >
+
+			</tbody>
+
+		</table>
+	
+	</div>
+	<!-- foot.js -->
+	<div class="footerPage">
+		<script type="text/javascript" src="../foot.js"></script>
+	</div>
+
+	<!-- jQuery -->
+	<script src="../../plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../../dist/js/adminlte.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="../../dist/js/table.min.js"></script>
+	<script src="../../dist/js/demo.js"></script>
+	<script src="../../dist/js/jquery-getUrlParam.js"></script>
+
+	<script type="text/javascript">
+		var ccode = $.getUrlParam("ccode").substring(0,4);
+		
+		$(document)
+				.ready(
+						function() {
+							showScenicDetails();
+							$('#scenic')
+									.DataTable(
+											{
+												"language" : {
+													"processing" : "處理中...",
+													"loadingRecords" : "載入中...",
+													"lengthMenu" : "***請勾選您認為必去的景點，或只勾選您想要去的城市/區域，由我們幫您安排***世界遺產及其被認定的年份：文指文化遺產，自指自然遺產***門票價格以新臺幣估算***",
+													"zeroRecords" : "沒有符合的結果",
+													"info" : "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+													"infoEmpty" : "顯示第 0 至 0 項結果，共 0 項",
+													"infoFiltered" : "(從 _MAX_ 項結果中過濾)",
+													"infoPostFix" : "",
+													"search" : "搜尋:",
+													"paginate" : {
+														"first" : "第一頁",
+														"previous" : "上一頁",
+														"next" : "下一頁",
+														"last" : "最後一頁"
+													},
+													"aria" : {
+														"sortAscending" : ": 升冪排列",
+														"sortDescending" : ": 降冪排列"
+													}
+												},
+												"autoWidth" : false,
+												"columnDefs" : [ {
+													"width" : "5%",
+													"orderable" : false,
+													"targets" : 0
+												}, {
+													"width" : "10%",
+													"targets" : 1
+												}, {
+													"width" : "15%",
+													"orderable" : false,
+													"targets" : 2
+												}, {
+													"width" : "8%",
+													"orderable" : false,
+													"targets" : 3
+
+												}, {
+													"width" : "5%",
+													"orderable" : false,
+													"targets" : 4
+												}, {
+													"width" : "8%",
+													"orderable" : false,
+													"targets" : 5
+												}, {
+													"width" : "42%",
+													"orderable" : false,
+													"targets" : 6
+												}, {
+													"width" : "7%",
+													"orderable" : false,
+													"targets" : 7
+												} ]
+
+											});
+							
+							$("#btn-add-othercoutry").click(function() {
+								var sCodes=new Array();
+								sCodes=$("input[name='scodecheck[]']:checked").map(function() { return $(this).val(); }).get();
+								if(sCodes.length===0){
+									alert("提醒：您尚未在本頁面選取任何景點！先幫您轉去重新選擇國家頁面！");
+									location.href = "/webs/vip/choose-scenic.html";
+									}else{
+								$.ajax({
+									"url" : "/scarts/add-scenic-to-cart",
+										"data" : {"sCodes" : sCodes},
+										"traditional" : true,
+										"type" : "post",
+										"dataType" : "json",
+										"success" : function(json) {
+											if (json.state == 100) {
+												location.href = "/webs/vip/choose-scenic.html";
+											} else {
+												alert(json.message);
+											}
+										},
+									});	
+									}
+							});					
+
+							$("#btn-add-scart").click(function() {
+								var sCodes=new Array();
+								sCodes=$("input[name='scodecheck[]']:checked").map(function() { return $(this).val(); }).get();
+								if(sCodes.length===0){
+									$.ajax({
+										"url" : "/scarts/not_empty",
+											"type" : "get",
+											"dataType" : "json",
+											"success" : function(json) {
+												if (json.state == 100) {
+													alert("提醒：您尚未在本頁面選擇任何景點！將幫您先計算之前已選景點。");
+													location.href = "/webs/vip/show-scarts.html";
+												} else {
+													alert(json.message);
+													location.href = "/webs/vip/choose-scenic.html";
+												}
+											},
+										});	
+									}else{
+								$.ajax({
+									"url" : "/scarts/add-scenic-to-cart",
+										"data" : {"sCodes" : sCodes},
+										"traditional" : true,
+										"type" : "post",
+										"dataType" : "json",
+										"success" : function(json) {
+											if (json.state == 100) {
+												console.log(sCodes);
+												location.href = "/webs/vip/show-scarts.html";
+											} else {
+												alert(json.message);
+											}
+										},
+									});	
+									};
+							});					
+						});
+	
+		
+		function showScenicDetails() {
+			$.ajax({
+						"url" : "/scenics/" + ccode + "/getscenic",
+						"type" : "get",
+						"dataType" : "json",
+						"success" : function(json) {
+							var list = json.data;
+							$("#cname").append(list[1].cname);
+							$("#scenic-details").empty();
+							for (var i = 0; i < list.length; i++) {
+										var trdetails = '<tr>'
+												+ '<td class='+ ((list[i].scenic)? "text-right" : "text-center") +'><input name="scodecheck[]" type="checkbox" value="{#scode}" ></td>'
+												+ '<td>{#tname}</td>'
+												+ '<td>'+ ((list[i].scenic)? list[i].scenic : "")+ '</td>'
+												+ '<td class="text-center">'+ ((list[i].unesco)? list[i].unesco : "")+ '</td>'
+												+ '<td class="text-right">'+ ((list[i].sticket)? list[i].sticket : "")+ '</td>'
+												+ '<td class="text-center">'+ ((list[i].stime)? list[i].stime : "")+ '</td>'
+												+ '<td>{#highlights}</td>'
+												+ '<td class="text-center"><a href="{#scenicWiki}"  target="_blank">More……</a></td>'
+												+ '</tr>'								
+								trdetails = trdetails.replace("{#scode}", 
+										list[i].scode);
+								trdetails = trdetails.replace("{#tname}",
+										list[i].tname);
+								trdetails = trdetails.replace("{#highlights}",
+										list[i].highlights);
+								trdetails = trdetails.replace("{#scenicWiki}",
+										list[i].scenicWiki);
+
+								$("#scenic-details").append(trdetails);
+							};
+						},
+					});
+			function refreshList() {
+				$('#scenic').dataTable().fnPageChange('refresh');
+			}
+
+		};
+
+	</script>
+
+</body>
+</html>

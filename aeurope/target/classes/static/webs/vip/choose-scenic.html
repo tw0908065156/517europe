@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>定製行程-選擇區域</title>
+
+<!-- Font: Source Sans Pro -->
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet"
+	href="../../plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+
+</head>
+
+<body class="hold-transition sidebar-collapse layout-top-nav">
+	<!-- head.js -->
+	<div class="headerPage">
+		<script type="text/javascript" src="viphead.js"></script>
+	</div>
+
+	<!-- body -->
+	<div>
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-1">
+					<div class="col-sm-4">
+						<h5>我們把歐洲簡單分為13個區塊，請選擇您感興趣的國家</h5>
+					</div>
+					<div class="col-sm-4">（可以一次多國，請分別選取）</div>
+					<div class="col-sm-4">
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item"><a
+								href="../europe-map.html"
+								target="_blank" title="歐洲國家分布圖">想先參考歐洲國家分布圖?請點這里!</a></li>
+						</ol>
+					</div>
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+		</section>
+
+		<section class="content" style="margin-left:15px; margin-right:15px">
+			<div class="row" id="country-details">
+			
+				<!--showCountryDetails();	-->
+				
+			</div>
+		</section>
+
+	</div>
+	<!-- foot.js -->
+	<div class="footerPage">
+		<script type="text/javascript" src="../foot.js"></script>
+	</div>
+
+	<!-- jQuery -->
+	<script src="../../plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../../dist/js/adminlte.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="../../dist/js/demo.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			showCountryDetails();
+		});
+
+		function showCountryDetails() {
+			$
+					.ajax({
+						"url" : "/countries/",
+						"type" : "get",
+						"dataType" : "json",
+						"success" : function(json) {
+							var list = json.data;
+							$("#country-details").empty();
+							for (var i = 0; i < list.length; i++) {
+								var countrylist = '<div  class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column ccodediv">'
+										+ '<a href="scenic-details.html?ccode=#{ccode}">'
+										+ '<div class="card bg-light d-flex flex-fill">'
+										+ '<img src="#{country-image}" alt="#{cname}"  style="border-radius: 4px">'
+										+ '<div class="card-footer">'
+										+ '<div class="text-right">'
+										+ '<b>#{cname}</b>'
+										+ '</div>'
+										+ '</div>' + '</div>' + '</div>';
+								countrylist = countrylist.replace("#{ccode}",
+										list[i].ccode);
+								countrylist = countrylist.replace(
+										"#{country-image}",
+										list[i].country_image);
+								countrylist = countrylist.replace("#{cname}",
+										list[i].cname);
+								countrylist = countrylist.replace("#{cname}",
+										list[i].cname);
+
+								$("#country-details").append(countrylist);
+							}
+							;
+						},
+					});
+		};
+	</script>
+
+</body>
+</html>

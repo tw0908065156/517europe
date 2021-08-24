@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.aeurope.mapper.ScartMapper">
+
+	<!-- 將選定的景點存入購物車表 -->
+	<!--Integer insertScart(List<ScenicCart> sCarts); -->
+	<insert id="insertScart"  parameterType="java.util.List">
+		<selectKey resultType="java.lang.Integer" keyProperty="id"
+	                   order="AFTER">
+	            SELECT LAST_INSERT_ID()
+	    </selectKey>
+	        INSERT INTO t_scart(
+	        	client_id, scode, 
+				created_user,  created_time,
+				modified_user, modified_time
+	        ) VALUES 
+	     <foreach collection="list" item="ScenicCart" index="index" separator=",">
+	            (
+	             #{ScenicCart.clientId}, #{ScenicCart.scode}, 
+				#{ScenicCart.createdUser}, #{ScenicCart.createdTime},
+				#{ScenicCart.modifiedUser}, #{ScenicCart.modifiedTime}
+	            )
+	      </foreach>      
+	</insert>
+	
+	<!--從購物車中刪除記錄(根據cartid刪除該條記錄)  -->
+	<!-- Integer deleteByCartid(Integer cartid); -->
+	<delete id="deleteByCartid">
+		DELETE 
+		FROM t_scart 
+		WHERE cartid=#{cartid}
+	</delete>
+	
+	
+	<!-- 刪除購物車中客戶記錄(已存入訂單後) -->
+	<!--Integer deleteByClientId(Integer clientId);  -->
+	<delete id="deleteByClientId">
+		DELETE
+		FROM t_scart
+		WHERE client_id=#{clientId}
+	</delete>
+	
+	<!-- 查詢購物車中的重復景點 -->
+	<!-- Integer selectScartByID(String clientEmail, String scode); -->
+	<select id="selectScartByID"  resultType="java.lang.Integer">
+		SELECT
+			count(*)
+		FROM t_scart
+		WHERE 
+			client_id=#{clientId} and scode=#{scode} 
+	</select>
+	
+	<!--根據前端傳回的id查詢數據是否存在？是否屬於登入用戶  -->
+	<!--ScenicCart selectScartByCartid(Integer cartid);  -->
+	<select id="selectScartByCartid"  resultType="cn.tedu.aeurope.entity.ScenicCart">
+		SELECT
+			client_id  AS clientId, scode
+		FROM t_scart
+		WHERE cartid=#{cartid}
+	</select>
+	
+	<!--根據用戶id查詢購物車列表  -->
+	<!--List<ScartVO> selectScartByclientId(Integer clientId);  -->
+	<select id="selectScartByclientId" resultType="cn.tedu.aeurope.vo.ScartVO">
+		SELECT 
+			t_scenic.sid, 
+			hotel_weights AS hotelWeights, 	bus_weights AS busWeights,		
+			cartid, ctname,
+			tname, tpriority,
+			scenic,  sticket,
+			stime, scenic_wiki AS scenicWiki,
+			spriority, t_scart.scode		
+		FROM 
+			t_scart
+		LEFT JOIN
+			t_scenic
+		ON 
+			t_scart.scode=t_scenic.scode
+		WHERE
+			client_id=#{clientId}
+		ORDER BY 
+			ccode, tpriority DESC, spriority DESC		
+	</select>
+
+	<!-- 查詢購物車中是否有資料 -->
+	<!-- Integer selectCountRows(Integer clientId) -->
+	<select id="selectCountRows" resultType="java.lang.Integer">
+	SELECT 
+		COALESCE(COUNT(cartid),0)
+	FROM t_scart
+	WHERE
+		client_id=#{clientId}
+	</select>
+	
+	<!--查詢購物車中景點門票費用 合計  -->
+	<!--Integer selectSumSticket(Integer clientId);  -->
+	<select id="selectSumSticket" resultType="java.lang.Integer">
+		SELECT
+			COALESCE(SUM(sticket),0)
+		FROM t_scart
+		LEFT JOIN t_scenic
+		ON t_scart.scode=t_scenic.scode
+		WHERE 
+			client_id=#{clientId}
+	</select>
+
+</mapper>

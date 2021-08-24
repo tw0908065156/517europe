@@ -1,0 +1,9 @@
+-------------------------------------------------------------------------------
+Test set: cn.tedu.aeurope.mapper.ClientMapperTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.01 s <<< FAILURE! - in cn.tedu.aeurope.mapper.ClientMapperTests
+initializationError  Time elapsed: 0.008 s  <<< ERROR!
+org.junit.runners.model.InvalidTestClassError: 
+Invalid test class 'cn.tedu.aeurope.mapper.ClientMapperTests':
+  1. No runnable methods
+

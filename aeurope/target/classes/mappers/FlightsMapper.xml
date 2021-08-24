@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.aeurope.mapper.FlightsMapper">
+
+	
+	<!-- 顯示航班類型列表（無參數） -->
+	<!-- List<FlightsType> listFlightsType(); -->
+	<select id="listFlightsType" resultType="cn.tedu.aeurope.entity.FlightsType">
+	SELECT
+		flightsid,
+		flights_type AS flightsType,
+		flights_name AS flightsName,
+		flights_code AS flightsCode,
+		transfer_type AS transferType
+	FROM  t_flights_type
+	WHERE fpriority>0
+	ORDER BY 
+		fpriority DESC
+	</select>
+	
+	<!-- 查詢航班類型(用於前端顯示) -->
+	<!-- String selectFlightsNameByid(Integer flightsid); -->
+	<select id="selectFlightsNameByid" resultType="java.lang.String">
+		SELECT
+			flights_name AS flightsName
+		FROM t_flights_type
+		WHERE flightsid=#{flightsid}
+	</select>
+	
+</mapper>

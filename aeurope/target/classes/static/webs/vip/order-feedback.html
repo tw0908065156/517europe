@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>定製行程-我的訂單</title>
+
+<!-- Font: Source Sans Pro -->
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet"
+	href="../../plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+
+</head>
+
+<body class="hold-transition sidebar-collapse layout-top-nav">
+	<!-- head.js -->
+	<div class="headerPage">
+		<script type="text/javascript" src="viphead.js"></script>
+	</div>
+
+	<!-- body -->
+	<div>
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">訂單明細（新生成的訂單約需3個工作日提供行程和報價，期間有任何問題歡迎聯絡我們或在訂單補充備註中提出）</h3>
+			</div>
+			<!-- /.card-header -->
+			<div class="card-body">
+				<table class="table table-bordered table-head-fixed ">
+					<thead>
+						<tr>
+							<th class="text-center" style="width: 6%">訂單日期</th>
+							<th class="text-center" style="width: 17%">已選城市/區域</th>
+							<th class="text-center" style="width: 8%">旅行天數</th>
+							<th class="text-center" style="width: 8%">貴賓人數</th>
+							<th class="text-center" style="width: 8%">飯店等級</th>
+							<th class="text-center" style="width: 14%">航班偏好</th>
+							<th class="text-center" style="width: 17%">訂單備註</th>
+							<th class="text-center" style="width: 10%">行程反饋</th>
+							<th colspan="2" class="text-center" style="width: 8%">訂單狀態</th>
+							<th class="text-center" style="width: 4%">移除</th>
+						</tr>
+					</thead>
+					<tbody id="order-list">
+						<!-- function showOrderList() -->
+					</tbody>
+				</table>
+			</div>
+			<!-- /.card-body -->
+
+		</div>
+
+
+
+		<!-- /.body -->
+	</div>
+
+	<!-- foot.js -->
+	<div class="footerPage">
+		<script type="text/javascript" src="../foot.js"></script>
+	</div>
+
+	<!-- jQuery -->
+	<script src="../../plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../../dist/js/adminlte.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="../../dist/js/demo.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			showOrderList();
+		});
+
+		function showOrderList() {
+			$.ajax({
+						"url" : "/orders/get_order_list",
+						"type" : "get",
+						"dataType" : "json",
+						"success" : function(json) {
+							var list = json.data;
+							$("#order-list").empty();
+							for (var i = 0; i < list.length; i++) {
+								var html = '<tr>'
+										+ '<td>#{createdTime}</td>'
+										+ '<td>#{townDetails}</td>'
+										+ '<td>#{daysAppend}</td>'
+										+ '<td>#{personAppend}</td>'
+										+ '<td>#{hotelAppend}</td>'
+										+ '<td>#{flightsAppend}</td>'
+										+ '<td>#{otherAppend}</td>'
+										+ '<td>'+((list[i].feedbackName)? '<a href="#{feedbackPdf}" target="_blank">#{feedbackName}<i class="fas fa-paperclip"></i></a>' : '')+'</td>'
+										+ '<td colspan="2"> #{orderStatusDesc}'+((list[i].orderStatus!=2) ? '</td>' : '</br><button onclick= "MultiplePayment(#{orderid})"  type="button" class="btn btn-block btn-success"><strong><i class="far fa-pay"></i>去付款</strong></button></td>')
+										+ '<td><button onclick= "deleteByOrderid(#{orderid})"  type="button" class="btn btn-default btn"> <i class="far fa-trash-alt"></i> </button></td>'
+										+ '</tr>'
+										+ '<tr>'
+										+ '<td colspan="9"><textarea id=#{add_append} class="form-control" rows="3" name="" placeholder='
+										+ ((list[i].orderStatus==9) ? "行程意見反饋(填寫完成請點擊“提交”按扭) : " : "訂單補充備註(填寫完成請點擊“提交”按扭) : ")+'></textarea>'
+										+ '</td>'
+										+ '<td colspan="2"><button onclick= "AddAppend(#{orderid})"  type="button" class="btn btn-default btn" style="margin-top:20px; color: #ffa86e"><strong><i class="far fa-file-alt"></i> 提交</strong></button></td>'
+										+ '</tr>';
+
+								html = html.replace("#{createdTime}",
+										list[i].dateFmt);
+								html = html.replace("#{townDetails}",
+										list[i].townDetails);
+								html = html.replace("#{daysAppend}",
+										list[i].daysAppend);
+								html = html.replace("#{personAppend}",
+										list[i].personAppend);
+								html = html.replace("#{hotelAppend}",
+										list[i].hotelAppend);
+								html = html.replace("#{flightsAppend}",
+										list[i].flightsAppend);
+								html = html.replace("#{otherAppend}",
+										list[i].otherAppend);
+								html = html.replace("#{feedbackPdf}",
+										list[i].feedbackPdf);
+								html = html.replace("#{feedbackName}",
+										list[i].feedbackName);
+								html = html.replace(/#{orderStatusDesc}/g,
+										list[i].orderStatusDesc);
+								html = html.replace(/#{orderid}/g,
+										list[i].orderid);
+								html = html.replace("#{add_append}",
+										"add_append" + list[i].orderid);
+
+								$("#order-list").append(html);
+							}
+							;
+						},
+					});
+		};
+		
+		function deleteByOrderid(orderid) {
+			$.ajax({
+				"url" : "/orders/" + orderid + "/delete_order",
+				"type" : "get",
+				"dataType" : "json",
+				"success" : function(json) {
+					if (json.state == 100) {
+						showOrderList();
+					} else {
+						alert(json.message);
+					}
+				},
+				"error" : function() {
+					alert("您的登入信息已過期，請重新登入！");
+					location.href = "/webs/login.html";
+				}
+			});
+		};
+		
+		function AddAppend(orderid){
+			var idAppend="add_append" + orderid
+			addAppend=$("#"+idAppend).val();
+			$.ajax({
+				"url" : "/order_appends/",
+				"data":{"addAppend":addAppend, "orderid":orderid},
+				"type" : "post",
+				"dataType" : "json",
+				"success" : function(json) {
+					if (json.state == 100) {
+						alert("備註添加成功，感謝您的寶貴意見，我們會盡快處理！");
+					} else {
+						alert(json.message);
+					}
+				},
+				"error" : function() {
+					alert("您的登入信息已過期，請重新登入！");
+					location.href = "/webs/login.html";
+				}
+			});
+		};
+		
+		function MultiplePayment(orderid){
+				$.ajax({
+					"url" : "/order_payment/payable",
+					"data":{"orderid":orderid},
+					"type" : "get",
+					"dataType" : "json",
+					"success" : function(json) {
+						if (json.state == 100) {
+							location.href = "multiple-payment.html?orderid="+orderid;
+						} else {
+							alert(json.message);
+						}
+					},
+				});
+		}
+		
+		
+	</script>
+
+</body>
+</html>

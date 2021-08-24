@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.aeurope.mapper.PersonNumberMapper">
+
+
+	<!-- 顯示參團人數列表（無參數） -->
+	<!--List<PersonNumber> listPersonNumber();  -->
+	<select id="listPersonNumber" resultType="cn.tedu.aeurope.entity.PersonNumber">
+	SELECT
+		personid,
+		total_person AS totalPerson,
+		person_number AS personNumber,
+		person_fare AS personFare
+	FROM t_person_bus
+	WHERE ppriority>0
+	ORDER BY 
+		ppriority DESC
+	</select>
+	
+		<!-- 查詢人數對應的車資(用於計算旅遊費用) -->
+	<!-- float selectPersonFareByid(Integer personid); -->
+	<select id="selectPersonFareByid" resultType="java.lang.Float">
+		SELECT
+			person_fare AS personFare
+		FROM t_person_bus
+		WHERE personid=#{psersonid}
+	</select>
+	
+	<!-- 查詢參團人數(用於前端顯示) -->
+	<!-- String selectTotalPersonByid(Integer personid); -->
+	<select id="selectTotalPersonByid" resultType="java.lang.String">
+		SELECT
+			total_person AS totalPerson
+		FROM t_person_bus
+		WHERE personid=#{psersonid}
+	</select>
+	
+
+</mapper>
